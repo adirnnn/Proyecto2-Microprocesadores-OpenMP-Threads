@@ -65,28 +65,36 @@ double monteCarloIntegracion(int numPuntos, double invInicial) {
 }
 
 int main() {
+    // Solicitar valores de inversión histórica al usuario
+    int numInversiones = 3;
+    double inversiones[numInversiones];
+    double rentabilidadesHistoricas[numInversiones];
+
+    for (int i = 0; i < numInversiones; i++) {
+        printf("Ingrese el valor de la inversion historica %d: ", i + 1);
+        scanf("%lf", &inversiones[i]);
+        printf("Ingrese la rentabilidad historica para la inversion %d (como decimal): ", i + 1);
+        scanf("%lf", &rentabilidadesHistoricas[i]);
+    }
+
     // Medir tiempo de ejecución
     double start = omp_get_wtime();
 
-    // Cargar Datos Históricos (Simulación simple para este ejemplo)
-    double inversiones[3] = {10000.0, 5000.0, 8000.0};  // Valores históricos
-    double rentabilidadesHistoricas[3] = {0.08, 0.05, 0.1};  // Rentabilidad histórica
-
-    double invInicial = 10000.0;
+    double invInicial = inversiones[0];  // Usar la primera inversión como ejemplo
     double rentabilidadIntegral = monteCarloIntegracion(NUM_SIMULACIONES, invInicial);
-    printf("Resultado de la simulación con integrales: %.2f%%\n", rentabilidadIntegral);
+    printf("Resultado de la simulacion con integrales: %.2f%%\n", rentabilidadIntegral);
 
     double finalValues[NUM_SIMULACIONES];
 
     // Paralelización de simulación con cadenas de Markov
     #pragma omp parallel for
     for (int i = 0; i < NUM_SIMULACIONES; ++i) {
-        int seed = i + omp_get_thread_num(); 
+        int seed = i + omp_get_thread_num();
         srand(seed);         
         double investmentValue = invInicial;
         Estado currentState = estable;
 
-        for (int year = 0; year < Plazo; ++year) {
+        for (int year = 0; year < Plazo; ++year) {  // Corrección aquí
             // Actualiza el estado basado en la matriz de transición
             currentState = getNextState(currentState);
             double annualReturn = generateNormal(returns[currentState], stdDevs[currentState]);
@@ -112,12 +120,12 @@ int main() {
     // Imprimir resultados finales
     printf("Rentabilidad Promedio con Cadenas de Markov: %.2f%%\n", rentabilidadMarkov);
     printf("Rentabilidad Final Combinada: %.2f%%\n", rentabilidadFinal);
-    printf("Incertidumbre entre ambos métodos: %.2f%%\n", incertidumbre);
+    printf("Incertidumbre entre ambos metodos: %.2f%%\n", incertidumbre);
 
     // Medir tiempo final y mostrar la diferencia
     double end = omp_get_wtime();
     double tiempoTotal = end - start;
-    printf("Tiempo total de ejecución (sec): %.2f\n", tiempoTotal);
+    printf("Tiempo total de ejecucion (seg): %0f\n", tiempoTotal);
 
     return 0;
 }

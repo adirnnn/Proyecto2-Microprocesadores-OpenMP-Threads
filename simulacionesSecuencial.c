@@ -72,7 +72,7 @@ int main() {
 
     double invInicial = 10000.0;
     double rentabilidadIntegral = monteCarloIntegracion(NUM_SIMULACIONES, invInicial);
-    printf("Resultado de la simulación con integrales: %.2f%%\n", rentabilidadIntegral);
+    printf("Resultado de la simulacion con integrales: %.2f%%\n", rentabilidadIntegral);
 
     double finalValues[NUM_SIMULACIONES];
 
@@ -109,12 +109,12 @@ int main() {
     // Imprimir resultados finales
     printf("Rentabilidad Promedio con Cadenas de Markov: %.2f%%\n", rentabilidadMarkov);
     printf("Rentabilidad Final Combinada: %.2f%%\n", rentabilidadFinal);
-    printf("Incertidumbre entre ambos métodos: %.2f%%\n", incertidumbre);
+    printf("Incertidumbre entre ambos metodos: %.2f%%\n", incertidumbre);
 
     // Medir tiempo final y mostrar la diferencia
     clock_t end = clock();
     double tiempoTotal = (double)(end - start) / CLOCKS_PER_SEC;
-    printf("Tiempo total de ejecución (sec): %.2f\n", tiempoTotal);
+    printf("Tiempo total de ejecucion (seg): %0f\n", tiempoTotal);
 
     return 0;
 }
